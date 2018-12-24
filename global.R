@@ -73,20 +73,20 @@ generateDT <- function(data, x_varname, performance){
   # print(data)
   dt <- data.frame(Bins=y_cat)
   print(dt)
-  print(y_cat)
-  print(x_cat)
+  print(typeof(y_cat))
+  print(typeof(x_cat))
   print('-------')
   for(i in seq(1,length(x_cat))){
-    dt[x_cat[i]] <- dt$Bins
+    dt[[x_cat[i]]] <- 0*seq(1,length(y_cat))
     for(j in seq(1,length(y_cat))){
-      # print(x_cat[i])
-      # print(y_cat[j])
+      print(x_cat[i])
+      print(y_cat[j])
       x <- data %>% 
               filter(!!as.name(x_varname) == x_cat[i] & score_bins == y_cat[j]) %>%
                 ungroup() %>%
                   select(!!as.name(performance))
       
-      dt[x_cat[i]][j] <- x[1,1]
+      dt[[x_cat[i]]][j] <- x[1,1]
       #dt[[x_cat[i]]][j] <- data[[performance]][which(df[[x_varname]] == x_cat[i] & df$score_bins == y_cat[j])]
     }
   }
