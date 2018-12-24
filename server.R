@@ -42,34 +42,115 @@ server <- function(input, output) {
                                 select(score_bins, !! input$var_inpt, !! input$perf2_rbtn),
                             input$var_inpt,
                             input$perf2_rbtn)
-    bins <- dfT_train$Bins
-    dfT_train<-dfT_train[!names(dfT_train)=='Bins']
+    #bins <- dfT_train$Bins
+    #bins[3] <- 1000
+    #dfT_train<-dfT_train[!names(dfT_train)=='Bins']
     
+    # dfT_train <- as.data.frame(dfT_train)
+    dt <- datatable(dfT_train,
+                    caption = 'Table 1: Train Data Set.',
+                    selection = list(target = 'cell'),
+                    rownames = dfT_train$Bins,
+                    options = list(dom = 't',  columnDefs = list(list(className = 'dt-center', targets = 0:length(names(dfT_train))-1))))
+      
     
-    datatable(dfT_train,  
-              selection = list(target = 'cell'),
-              rownames = bins,
-              options = list(dom = 't', columnDefs = list(list(className = 'dt-center', targets = 0:length(names(dfT_train))-1)))) %>% 
-      formatStyle(names(dfT_train), textAlign = 'center') %>%
-      formatPercentage(names(dfT_train), 1) %>%
-      formatStyle(names(dfT_train), backgroundColor = styleInterval(c(1/100, 5/100, 10/100), c('red','orange','yellow','green')))
+    if(input$perf2_rbtn=='perf_fis'){
+      dt<- dt %>%
+            formatStyle(names(dfT_train), textAlign = 'center') %>%
+            formatPercentage(names(dfT_train[!names(dfT_train)=='Bins']), 2) %>%
+            formatStyle(names(dfT_train[!names(dfT_train)=='Bins']), backgroundColor = styleInterval(c(1/100, 5/100, 10/100), c('red','orange','yellow','green')))
 
+    }
+    else if(input$perf2_rbtn=='perf_fin'){
+      dt<- dt %>%
+            formatStyle(names(dfT_train), textAlign = 'center') %>%
+            formatPercentage(names(dfT_train[!names(dfT_train)=='Bins']), 2) %>%
+            formatStyle(names(dfT_train[!names(dfT_train)=='Bins']), backgroundColor = styleInterval(c(1/100, 5/100, 10/100), c('red','orange','yellow','green')))
+          
+      
+    }
+    else if(input$perf2_rbtn=='vl_risco'){
+      dt<- dt %>%
+            formatStyle(names(dfT_train), textAlign = 'center') %>%
+            formatRound(names(dfT_train[!names(dfT_train)=='Bins']), 1) %>%
+            formatStyle(names(dfT_train[!names(dfT_train)=='Bins']), backgroundColor = styleInterval(c(1000, 2000, 5000), c('red','orange','yellow','green')))
+      
+    }
+    else if(input$perf2_rbtn=='vl_contr'){
+      dt<- dt %>%
+            formatStyle(names(dfT_train), textAlign = 'center') %>%
+            formatRound(names(dfT_train[!names(dfT_train)=='Bins']), 1) %>%
+            formatStyle(names(dfT_train[!names(dfT_train)=='Bins']), backgroundColor = styleInterval(c(1000, 2000, 5000), c('red','orange','yellow','green')))
+      
+    }
+    else if(input$perf2_rbtn=='cnt_qtd_cnpj'){
+      dt<- dt %>%
+            formatStyle(names(dfT_train), textAlign = 'center') %>%
+            formatRound(names(dfT_train[!names(dfT_train)=='Bins']), 0) %>%
+            formatStyle(names(dfT_train[!names(dfT_train)=='Bins']), backgroundColor = styleInterval(c(1000, 2000, 5000), c('red','orange','yellow','green')))
+          
+    }
+    
+    dt
   })
   
   output$tbl_test <- renderDataTable({ 
-      refs <- c(201602, 201603, 201604, 201605, 201606, 201607)
-      
-       
-      
-      dfT_test  <- generateDT(get_DT(df, refs, 0, input$var_inpt) %>% 
-                                select(score_bins, !! input$var_inpt, !! input$perf2_rbtn),
-                              input$var_inpt,
-                              input$perf2_rbtn)
-      datatable(dfT_test, 
-                selection = list(target = 'cell'),
-                options = list(dom = 'tp')) %>% 
-          formatStyle(names(dfT_test), backgroundColor = styleInterval(c(1/100, 5/100, 10/100), c('red','orange','yellow','green')))
+    refs <- c(201602, 201603, 201604, 201605, 201606, 201607)
     
+    dfT_test <- generateDT(get_DT(df, refs, 0, input$var_inpt) %>% 
+                              select(score_bins, !! input$var_inpt, !! input$perf2_rbtn),
+                            input$var_inpt,
+                            input$perf2_rbtn)
+    #bins <- dfT_train$Bins
+    #bins[3] <- 1000
+    #dfT_train<-dfT_train[!names(dfT_train)=='Bins']
+    
+    # dfT_train <- as.data.frame(dfT_train)
+    dt <- datatable(dfT_test,
+                    caption = 'Table 2: Test Data Set.',
+                    selection = list(target = 'cell'),
+                    rownames = dfT_test$Bins,
+                    options = list(dom = 't',  columnDefs = list(list(className = 'dt-center', targets = 0:length(names(dfT_test))-1)))) 
+    
+    
+    if(input$perf2_rbtn=='perf_fis'){
+      dt <- dt %>% 
+        formatStyle(names(dfT_test), textAlign = 'center') %>%
+        formatPercentage(names(dfT_test[!names(dfT_test)=='Bins']), 2) %>%
+        formatStyle(names(dfT_test[!names(dfT_test)=='Bins']), backgroundColor = styleInterval(c(1/100, 5/100, 10/100), c('red','orange','yellow','green')))
+      
+    }
+    else if(input$perf2_rbtn=='perf_fin'){
+      dt <- dt %>% 
+        formatStyle(names(dfT_test), textAlign = 'center') %>%
+        formatPercentage(names(dfT_test[!names(dfT_test)=='Bins']), 2) %>%
+        formatStyle(names(dfT_test[!names(dfT_test)=='Bins']), backgroundColor = styleInterval(c(1/100, 5/100, 10/100), c('red','orange','yellow','green')))
+      
+      
+    }
+    else if(input$perf2_rbtn=='vl_risco'){
+      dt <- dt %>% 
+        formatStyle(names(dfT_test), textAlign = 'center') %>%
+        formatRound(names(dfT_test[!names(dfT_test)=='Bins']), 1) %>%
+        formatStyle(names(dfT_test[!names(dfT_test)=='Bins']), backgroundColor = styleInterval(c(1000, 2000, 5000), c('red','orange','yellow','green')))
+      
+    }
+    else if(input$perf2_rbtn=='vl_contr'){
+      dt <- dt %>% 
+        formatStyle(names(dfT_test), textAlign = 'center') %>%
+        formatRound(names(dfT_test[!names(dfT_test)=='Bins']), 1) %>%
+        formatStyle(names(dfT_test[!names(dfT_test)=='Bins']), backgroundColor = styleInterval(c(1000, 2000, 5000), c('red','orange','yellow','green')))
+      
+    }
+    else if(input$perf2_rbtn=='cnt_qtd_cnpj'){
+      dt <- dt %>% 
+        formatStyle(names(dfT_test), textAlign = 'center') %>%
+        formatRound(names(dfT_test[!names(dfT_test)=='Bins']), 0) %>%
+        formatStyle(names(dfT_test[!names(dfT_test)=='Bins']), backgroundColor = styleInterval(c(1000, 2000, 5000), c('red','orange','yellow','green')))
+      
+    }
+    
+    dt
   })
 
   

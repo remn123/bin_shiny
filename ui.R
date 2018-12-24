@@ -138,7 +138,6 @@ body    <- dashboardBody(
                       "Selecione uma variável:",
                       names(df)[!names(df) %in% c('pk_dt','pk_cd_cnpj','score','score_bins','vl_risco','vl_contr','vl_perf','perf')]
           ),
-          hr(),
           radioButtons("perf2_rbtn", 
                        "Performance:",
                        c("BR Física"        = "perf_fis",
@@ -152,8 +151,12 @@ body    <- dashboardBody(
               # height = 800,
             DTOutput('tbl_train')
           ),
+          box(width=11,
+              # height = 800,
+              
+              DTOutput('tbl_test')
+          ),
           
-          #DTOutput('tbl_test'),
           hr()
       )
       # column(width=6,
